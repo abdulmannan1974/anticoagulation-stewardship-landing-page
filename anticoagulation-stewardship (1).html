@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anticoagulation Stewardship — Blood 🩸Doctor</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f3ef;
+    --surface: #ffffff;
+    --surface2: #faf9f7;
+    --border: #e2ddd6;
+    --border-strong: #c8c0b4;
+    --blood: #c0181a;
+    --blood-light: #fdf0f0;
+    --blood-mid: #f5d0d0;
+    --ink: #1c1a17;
+    --ink-2: #3d3830;
+    --ink-3: #6b6257;
+    --ink-4: #9e9082;
+    --teal: #0d7d6b;
+    --teal-light: #e6f5f2;
+    --amber: #b85c00;
+    --amber-light: #fdf4e6;
+    --blue: #1a4f9e;
+    --blue-light: #e8eef9;
+    --gold: #c4901a;
+    --gold-light: #fdf6e3;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--ink); line-height: 1.7; }
+
+  /* HEADER */
+  header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 2rem; position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
+  .hdr { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 0.7rem 0; gap: 1rem; }
+  .brand { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+  .brand-circle { width: 46px; height: 46px; background: var(--blood); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.35rem; flex-shrink: 0; box-shadow: 0 2px 8px rgba(192,24,26,0.35); }
+  .brand-name { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 700; color: var(--ink); line-height: 1.1; }
+  .brand-name em { color: var(--blood); font-style: normal; }
+  .brand-cred { font-size: 0.62rem; color: var(--ink-4); font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em; }
+  .hdr-right { text-align: right; flex-shrink: 0; }
+  .hdr-title { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; color: var(--blood); }
+  .hdr-sub { font-size: 0.62rem; color: var(--ink-4); font-family: 'JetBrains Mono', monospace; letter-spacing: 0.05em; text-transform: uppercase; }
+
+  /* HERO */
+  .hero { background: linear-gradient(130deg, var(--blood) 0%, #7a0c0c 100%); padding: 3rem 2rem; text-align: center; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 70% 30%, rgba(255,255,255,0.07) 0%, transparent 60%); }
+  .hero-inner { position: relative; max-width: 780px; margin: 0 auto; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.25); color: rgba(255,255,255,0.9); font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; padding: 0.3rem 1rem; border-radius: 100px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.2rem; }
+  .hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 8vw, 4rem); font-weight: 700; color: #ffffff !important; line-height: 1.1; margin-bottom: 0.8rem; letter-spacing: -0.02em; text-shadow: 0 1px 4px rgba(0,0,0,0.2); }
+  .hero-sub { color: rgba(255,255,255,0.88); font-size: 1rem; max-width: 560px; margin: 0 auto 1.4rem; font-weight: 300; }
+  .hero-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
+  .hp { background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.28); color: white; font-size: 0.72rem; padding: 0.28rem 0.8rem; border-radius: 100px; font-weight: 500; }
+
+  /* TABS */
+  .nav-wrap { background: var(--surface); border-bottom: 2px solid var(--border); overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .nav-tabs { display: flex; max-width: 1200px; margin: 0 auto; padding: 0 1rem; white-space: nowrap; }
+  .tb { background: transparent; border: none; border-bottom: 3px solid transparent; color: var(--ink-3); font-family: 'Outfit', sans-serif; font-size: 0.82rem; font-weight: 500; padding: 0.9rem 1rem; cursor: pointer; transition: all 0.2s; margin-bottom: -2px; flex-shrink: 0; }
+  .tb:hover { color: var(--blood); }
+  .tb.active { color: var(--blood); border-bottom-color: var(--blood); font-weight: 700; }
+
+  /* SECTIONS */
+  .section { display: none; padding: 2.5rem 2rem; max-width: 1200px; margin: 0 auto; }
+  .section.active { display: block; }
+  .st { font-family: 'Cormorant Garamond', serif; font-size: 1.9rem; font-weight: 700; color: var(--ink); margin-bottom: 0.2rem; letter-spacing: -0.02em; }
+  .sl { font-family: 'JetBrains Mono', monospace; font-size: 0.63rem; color: var(--blood); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.8rem; }
+
+  /* CALLOUTS */
+  .co { display: flex; gap: 1rem; padding: 1.1rem 1.4rem; border-radius: 8px; border-left: 4px solid; margin: 1.4rem 0; align-items: flex-start; }
+  .co.danger { background: var(--blood-light); border-color: var(--blood); }
+  .co.warn { background: var(--amber-light); border-color: var(--amber); }
+  .co.safe { background: var(--teal-light); border-color: var(--teal); }
+  .co.info { background: var(--gold-light); border-color: var(--gold); }
+  .co.blue { background: var(--blue-light); border-color: var(--blue); }
+  .co-icon { font-size: 1.2rem; flex-shrink: 0; padding-top: 0.1rem; }
+  .co-lbl { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; margin-bottom: 0.3rem; }
+  .co.danger .co-lbl { color: var(--blood); } .co.warn .co-lbl { color: var(--amber); } .co.safe .co-lbl { color: var(--teal); } .co.info .co-lbl { color: var(--gold); } .co.blue .co-lbl { color: var(--blue); }
+  .co p { color: var(--ink-2); font-size: 0.89rem; }
+
+  /* CARDS */
+  .cg { display: grid; grid-template-columns: repeat(auto-fit, minmax(255px, 1fr)); gap: 1.2rem; margin: 1.5rem 0; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.4rem; position: relative; overflow: hidden; transition: box-shadow 0.2s, transform 0.2s; }
+  .card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.09); }
+  .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+  .card.red::before { background: var(--blood); } .card.amber::before { background: var(--amber); } .card.teal::before { background: var(--teal); } .card.blue::before { background: var(--blue); }
+  .card-icon { font-size: 1.8rem; margin-bottom: 0.7rem; }
+  .card h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.12rem; font-weight: 700; color: var(--ink); margin-bottom: 0.4rem; }
+  .card p { color: var(--ink-3); font-size: 0.86rem; }
+
+  /* TABLES */
+  .tw { overflow-x: auto; margin: 1.4rem 0; border-radius: 8px; border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.87rem; }
+  thead { background: var(--blood); }
+  thead th { padding: 0.85rem 1rem; text-align: left; color: white; font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; }
+  tbody tr { border-bottom: 1px solid var(--border); background: var(--surface); transition: background 0.12s; }
+  tbody tr:nth-child(even) { background: var(--surface2); }
+  tbody tr:hover { background: #f0ede8; }
+  tbody tr:last-child { border-bottom: none; }
+  td { padding: 0.82rem 1rem; color: var(--ink-2); vertical-align: top; }
+  td:first-child { color: var(--ink); font-weight: 600; }
+  .row-red td { background: #fff5f5 !important; } .row-amber td { background: #fff9f2 !important; } .row-green td { background: #f0fbf8 !important; }
+  .pill { display: inline-block; padding: 0.18rem 0.6rem; border-radius: 100px; font-size: 0.67rem; font-weight: 700; font-family: 'JetBrains Mono', monospace; white-space: nowrap; }
+  .pr { background: #fde8e8; color: var(--blood); border: 1px solid #f0b8b8; }
+  .pg { background: #e6f5f0; color: var(--teal); border: 1px solid #a8ddd3; }
+  .pa { background: #fdf0e0; color: var(--amber); border: 1px solid #f0cfaa; }
+  .pb { background: var(--blue-light); color: var(--blue); border: 1px solid #b0c8ee; }
+  .pgr { background: #f5f3ef; color: var(--ink-3); border: 1px solid var(--border-strong); }
+
+  /* PILLARS */
+  .pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(185px, 1fr)); gap: 1.1rem; margin: 1.5rem 0; }
+  .pillar { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.4rem 1.1rem; text-align: center; position: relative; overflow: hidden; transition: box-shadow 0.2s, border-color 0.2s; }
+  .pillar:hover { box-shadow: 0 6px 20px rgba(192,24,26,0.1); border-color: var(--blood-mid); }
+  .pn { font-family: 'Cormorant Garamond', serif; font-size: 4.5rem; font-weight: 700; opacity: 0.05; position: absolute; top: -1rem; right: 0.3rem; color: var(--blood); line-height: 1; pointer-events: none; }
+  .pillar-icon { font-size: 2rem; margin-bottom: 0.7rem; }
+  .pillar h4 { color: var(--ink); font-size: 0.9rem; font-weight: 700; margin-bottom: 0.35rem; }
+  .pillar p { color: var(--ink-3); font-size: 0.79rem; }
+
+  /* DOAC */
+  .dg { display: grid; grid-template-columns: repeat(auto-fit, minmax(225px, 1fr)); gap: 1.2rem; margin: 1.5rem 0; }
+  .dc { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .dc-h { padding: 0.9rem 1.2rem; }
+  .dc:nth-child(1) .dc-h { background: var(--blood); }
+  .dc:nth-child(2) .dc-h { background: #7b3800; }
+  .dc:nth-child(3) .dc-h { background: var(--teal); }
+  .dc:nth-child(4) .dc-h { background: var(--blue); }
+  .dc-hn { font-family: 'Cormorant Garamond', serif; font-size: 1.12rem; font-weight: 700; color: white; }
+  .dc-hs { font-size: 0.67rem; color: rgba(255,255,255,0.7); font-family: 'JetBrains Mono', monospace; }
+  .dc-b { padding: 0.85rem 1.2rem; }
+  .dc-r { display: flex; justify-content: space-between; align-items: flex-start; padding: 0.36rem 0; border-bottom: 1px solid var(--border); font-size: 0.79rem; gap: 0.5rem; }
+  .dc-r:last-child { border-bottom: none; }
+  .dc-k { color: var(--ink-4); font-size: 0.72rem; flex-shrink: 0; }
+  .dc-v { color: var(--ink); font-weight: 600; text-align: right; font-size: 0.77rem; }
+
+  /* RISK MATRIX */
+  .rm { display: grid; grid-template-columns: auto 1fr 1fr; gap: 3px; margin: 1.5rem 0; border-radius: 8px; overflow: hidden; background: var(--border); }
+  .rmc { padding: 1rem; text-align: center; font-size: 0.82rem; }
+  .rmh { background: var(--blood); color: white; font-family: 'JetBrains Mono', monospace; font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; }
+  .rml { background: var(--ink-2); color: white; display: flex; align-items: center; justify-content: center; font-size: 0.71rem; font-weight: 600; padding: 1rem 0.7rem; writing-mode: vertical-rl; transform: rotate(180deg); }
+  .rmhl { background: #fff5f5; } .rmhh { background: #ffe0e0; } .rmll { background: #f0faf7; } .rmlh { background: #e8f0fc; }
+  .rmt { font-weight: 700; font-size: 0.85rem; color: var(--ink); margin-bottom: 0.35rem; }
+
+  /* FLOWCHART */
+  .fw { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; margin: 1.5rem 0; box-shadow: 0 4px 16px rgba(0,0,0,0.05); }
+  .fh { font-family: 'JetBrains Mono', monospace; font-size: 0.67rem; color: var(--blood); letter-spacing: 0.1em; text-transform: uppercase; text-align: center; margin-bottom: 2rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+  .fh::before, .fh::after { content: ''; flex: 1; height: 1px; background: var(--border-strong); }
+  .flow { display: flex; flex-direction: column; align-items: center; }
+  .fn { width: 100%; max-width: 460px; padding: 0.9rem 1.4rem; border-radius: 8px; text-align: center; font-size: 0.86rem; font-weight: 500; }
+  .fn small { display: block; font-size: 0.74rem; opacity: 0.7; margin-top: 0.25rem; font-weight: 400; }
+  .fn.start { background: var(--surface2); border: 2px solid var(--border-strong); color: var(--ink-2); }
+  .fn.action { background: var(--blue-light); border: 2px solid #b8ccee; color: var(--blue); }
+  .fn.ok { background: var(--teal-light); border: 2px solid #a8ddd3; color: var(--teal); }
+  .fn.stop { background: var(--blood-light); border: 2px solid var(--blood-mid); color: var(--blood); }
+  .fn.end { background: var(--surface2); border: 2px dashed var(--border-strong); color: var(--ink-3); font-size: 0.82rem; }
+  .arr { width: 1px; height: 26px; background: var(--border-strong); position: relative; margin: 2px auto; }
+  .arr::after { content: '▾'; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); color: var(--ink-4); font-size: 0.72rem; }
+  .fq { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; color: var(--ink-4); text-align: center; margin: 4px 0 6px; }
+  .br { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; width: 100%; max-width: 540px; }
+  .bc { display: flex; flex-direction: column; align-items: center; min-width: 175px; }
+  .bl { font-size: 0.68rem; font-weight: 700; font-family: 'JetBrains Mono', monospace; padding: 0.2rem 0.7rem; border-radius: 100px; margin-bottom: 4px; }
+  .bln { background: #fde8e8; color: var(--blood); }
+  .bly { background: var(--teal-light); color: var(--teal); }
+
+  /* REVERSAL */
+  .rg { display: grid; grid-template-columns: repeat(auto-fit, minmax(238px, 1fr)); gap: 1.2rem; margin: 1.5rem 0; }
+  .rc { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .rt { padding: 0.9rem 1.2rem; display: flex; justify-content: space-between; align-items: center; }
+  .rd { font-weight: 700; color: white; font-size: 0.9rem; }
+  .rb { padding: 0.8rem 1.2rem 1.2rem; }
+  .ri { font-size: 0.82rem; color: var(--ink-3); padding: 0.28rem 0; border-bottom: 1px solid var(--border); }
+  .ri:last-child { border-bottom: none; }
+  .ri strong { color: var(--ink); }
+
+  /* TIMELINE */
+  .tl { padding-left: 2rem; position: relative; margin: 1.5rem 0; }
+  .tl::before { content: ''; position: absolute; left: 0.52rem; top: 0.3rem; bottom: 0.3rem; width: 2px; background: linear-gradient(to bottom, var(--blood), var(--border)); }
+  .ti { margin-bottom: 1.5rem; position: relative; }
+  .td { position: absolute; left: -1.7rem; top: 0.35rem; width: 12px; height: 12px; border-radius: 50%; background: white; border: 2.5px solid var(--blood); }
+  .tt { font-family: 'JetBrains Mono', monospace; font-size: 0.63rem; color: var(--blood); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 0.2rem; }
+  .ti h4 { color: var(--ink); font-size: 0.9rem; font-weight: 600; margin-bottom: 0.2rem; }
+  .ti p { color: var(--ink-3); font-size: 0.82rem; }
+
+  /* CHECKLIST */
+  .chk { list-style: none; margin: 0.8rem 0; }
+  .chk li { display: flex; gap: 0.75rem; align-items: flex-start; padding: 0.65rem 0; border-bottom: 1px solid var(--border); font-size: 0.87rem; color: var(--ink-2); }
+  .chk li:last-child { border-bottom: none; }
+  .chk li::before { content: '☐'; color: var(--blood); font-size: 1rem; flex-shrink: 0; line-height: 1.4; }
+  .chk li span { color: var(--ink); font-weight: 600; }
+
+  /* MISC */
+  hr.div { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .ss { color: var(--ink-3); font-size: 0.79rem; margin-top: 0.5rem; line-height: 1.5; }
+  .qb { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem; margin-top: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .qb-t { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 700; color: var(--ink); margin-bottom: 1rem; }
+  ol.ql { color: var(--ink-2); font-size: 0.875rem; line-height: 2.1; padding-left: 1.2rem; }
+  ol.ql li::marker { color: var(--blood); font-weight: 700; }
+
+  /* FOOTER */
+  footer { background: var(--ink); margin-top: 3rem; }
+  .ft { background: var(--blood); padding: 2rem; text-align: center; }
+  .fl { display: inline-flex; align-items: center; gap: 1rem; margin-bottom: 0.9rem; }
+  .flc { width: 54px; height: 54px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+  .fbn { font-family: 'Cormorant Garamond', serif; font-size: 1.55rem; font-weight: 700; color: white; line-height: 1.1; }
+  .fbs { font-size: 0.67rem; color: rgba(255,255,255,0.7); font-family: 'JetBrains Mono', monospace; letter-spacing: 0.05em; }
+  .ftag { color: rgba(255,255,255,0.82); font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-style: italic; }
+  .fb { padding: 2rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; max-width: 1000px; margin: 0 auto; }
+  .fc-t { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: #f5d0d0; margin-bottom: 0.8rem; padding-bottom: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); }
+  .fc p, .fc a { font-size: 0.82rem; color: rgba(255,255,255,0.62); display: block; text-decoration: none; line-height: 1.9; }
+  .fc a:hover { color: #f5d0d0; }
+  .fc strong { color: rgba(255,255,255,0.9); }
+  .fbase { border-top: 1px solid rgba(255,255,255,0.08); padding: 1.2rem 2rem; text-align: center; font-size: 0.7rem; color: rgba(255,255,255,0.28); font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em; }
+
+  /* ── MOBILE ≤480px ── */
+  @media (max-width: 480px) {
+    header { padding: 0 1rem; }
+    .hdr { padding: 0.55rem 0; }
+    .brand-circle { width: 36px; height: 36px; font-size: 1rem; }
+    .brand-name { font-size: 1.05rem; }
+    .brand-cred { font-size: 0.54rem; }
+    .hdr-right { display: none; }
+
+    .hero { padding: 1.8rem 1.1rem 1.6rem; }
+    .eyebrow { font-size: 0.56rem; padding: 0.25rem 0.75rem; }
+    .hero h1 { font-size: 2rem; color: #fff !important; text-shadow: 0 1px 6px rgba(0,0,0,0.3); }
+    .hero-sub { font-size: 0.88rem; color: rgba(255,255,255,0.9); }
+    .hp { font-size: 0.63rem; padding: 0.2rem 0.6rem; }
+
+    .nav-tabs { padding: 0 0.4rem; }
+    .tb { font-size: 0.7rem; padding: 0.7rem 0.65rem; }
+
+    .section { padding: 1.4rem 0.9rem; }
+    .st { font-size: 1.45rem; }
+    .sl { font-size: 0.57rem; margin-bottom: 1.1rem; }
+
+    .co { padding: 0.85rem 0.95rem; gap: 0.6rem; }
+    .co-icon { font-size: 1rem; }
+    .co p { font-size: 0.83rem; }
+    .co-lbl { font-size: 0.56rem; }
+
+    /* Cards → horizontal layout single col */
+    .cg { grid-template-columns: 1fr; gap: 0.85rem; }
+    .card { display: flex; align-items: flex-start; gap: 0.9rem; padding: 1rem; }
+    .card::before { top: 0; left: 0; right: auto; width: 3px; height: 100%; border-radius: 0; }
+    .card-icon { font-size: 1.4rem; margin-bottom: 0; flex-shrink: 0; margin-top: 0.1rem; }
+    .card h3 { font-size: 0.97rem; margin-bottom: 0.2rem; }
+    .card p { font-size: 0.81rem; }
+
+    .tw { border-radius: 6px; -webkit-overflow-scrolling: touch; }
+    table { font-size: 0.76rem; min-width: 400px; }
+    thead th { padding: 0.65rem 0.7rem; font-size: 0.56rem; }
+    td { padding: 0.6rem 0.7rem; }
+
+    /* Pillars 2-col */
+    .pillars { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .pillar { padding: 1rem 0.75rem; }
+    .pillar-icon { font-size: 1.5rem; margin-bottom: 0.45rem; }
+    .pillar h4 { font-size: 0.8rem; }
+    .pillar p { font-size: 0.71rem; }
+    .pn { font-size: 3.2rem; }
+
+    /* DOACs, reversal → single col */
+    .dg { grid-template-columns: 1fr; gap: 0.9rem; }
+    .rg { grid-template-columns: 1fr; gap: 0.9rem; }
+    .rt { flex-wrap: wrap; gap: 0.4rem; }
+    .rd { font-size: 0.82rem; }
+    .ri { font-size: 0.78rem; }
+    .dc-r { font-size: 0.77rem; }
+    .dc-k { font-size: 0.67rem; }
+    .dc-v { font-size: 0.73rem; }
+
+    /* Risk matrix */
+    .rm { font-size: 0.73rem; }
+    .rmc { padding: 0.65rem 0.4rem; }
+    .rmh { font-size: 0.55rem; letter-spacing: 0.03em; }
+    .rml { font-size: 0.62rem; padding: 0.65rem 0.4rem; }
+    .rmt { font-size: 0.76rem; }
+
+    /* Flowchart */
+    .fw { padding: 1.1rem 0.85rem; }
+    .fn { font-size: 0.79rem; padding: 0.7rem 0.9rem; max-width: 100%; }
+    .fn small { font-size: 0.67rem; }
+    .br { flex-direction: column; align-items: center; gap: 0.5rem; }
+    .bc { width: 100%; max-width: 240px; min-width: 0; }
+
+    /* Checklist + two-col */
+    .two { grid-template-columns: 1fr; gap: 0; }
+    .chk li { font-size: 0.82rem; padding: 0.58rem 0; }
+    .qb { padding: 1rem; }
+    ol.ql { font-size: 0.82rem; line-height: 1.85; }
+
+    /* Timeline */
+    .tl { padding-left: 1.5rem; }
+    .ti h4 { font-size: 0.85rem; }
+    .ti p { font-size: 0.78rem; }
+
+    /* Footer */
+    .ft { padding: 1.4rem 1rem; }
+    .fl { gap: 0.65rem; }
+    .flc { width: 42px; height: 42px; font-size: 1.25rem; }
+    .fbn { font-size: 1.2rem; }
+    .ftag { font-size: 0.88rem; }
+    .fb { padding: 1.4rem 1rem; gap: 1.3rem; grid-template-columns: 1fr; }
+    .fbase { font-size: 0.6rem; padding: 0.9rem 1rem; letter-spacing: 0.02em; }
+    hr.div { margin: 1.3rem 0; }
+  }
+
+  /* ── TABLET 481–768px ── */
+  @media (min-width: 481px) and (max-width: 768px) {
+    header { padding: 0 1.2rem; }
+    .hdr-right { display: none; }
+    .hero { padding: 2.2rem 1.4rem; }
+    .hero h1 { font-size: clamp(2rem, 7vw, 2.8rem); color: #fff; }
+    .hero-sub { color: rgba(255,255,255,0.9); }
+    .section { padding: 2rem 1.2rem; }
+    .cg { grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .pillars { grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    .dg { grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .rg { grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .two { grid-template-columns: 1fr; gap: 1.2rem; }
+    .tb { font-size: 0.75rem; padding: 0.8rem 0.75rem; }
+    table { min-width: 480px; font-size: 0.81rem; }
+    .br { flex-direction: column; align-items: center; }
+    .bc { width: 100%; max-width: 260px; }
+    .fb { grid-template-columns: 1fr; }
+  }
+
+  /* ── DESKTOP ≥769px ── */
+  @media (min-width: 769px) {
+    .two { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="hdr">
+    <a class="brand" href="#">
+      <div class="brand-circle">🩸</div>
+      <div>
+        <div class="brand-name">Blood <em>🩸</em> Doctor</div>
+        <div class="brand-cred">Dr Abdul Mannan · FRCPath · FCPS</div>
+      </div>
+    </a>
+    <div class="hdr-right">
+      <div class="hdr-title">Anticoagulation Stewardship</div>
+      <div class="hdr-sub">Haematology Education Series · 2025</div>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">🩸 Blood Doctor · Clinical Education Series</div>
+    <h1>Anticoagulation<br>Stewardship</h1>
+    <p class="hero-sub">Right drug · Right dose · Right duration · Right monitoring. A complete concept-building reference for clinicians at every level.</p>
+    <div class="hero-pills">
+      <span class="hp">AF Management</span>
+      <span class="hp">VTE Treatment</span>
+      <span class="hp">DOACs vs Warfarin</span>
+      <span class="hp">Reversal Agents</span>
+      <span class="hp">Bleeding Risk</span>
+      <span class="hp">Cancer-VTE</span>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="nav-wrap">
+  <div class="nav-tabs">
+    <button class="tb active" onclick="show('concept',this)">📌 Concept</button>
+    <button class="tb" onclick="show('pillars',this)">🏛 5 Pillars</button>
+    <button class="tb" onclick="show('doacs',this)">💊 DOACs & Warfarin</button>
+    <button class="tb" onclick="show('risk',this)">⚖️ Risk Assessment</button>
+    <button class="tb" onclick="show('flowchart',this)">🔀 Decision Flow</button>
+    <button class="tb" onclick="show('reversal',this)">🚨 Reversal Agents</button>
+    <button class="tb" onclick="show('monitoring',this)">📊 Monitoring</button>
+    <button class="tb" onclick="show('checklist',this)">✅ Checklist</button>
+  </div>
+</div>
+
+<!-- ═══ SECTION 1: CONCEPT ═══ -->
+<div id="sec-concept" class="section active">
+  <div class="st">What Is Anticoagulation Stewardship?</div>
+  <div class="sl">Foundations · Concept Building</div>
+
+  <div class="co info">
+    <div class="co-icon">💡</div>
+    <div><div class="co-lbl">The One-Line Definition</div>
+    <p>Anticoagulation stewardship is the systematic, ongoing process of ensuring every patient is on the <strong>right drug, right dose, right indication, right duration</strong> — with continuous monitoring and review at every clinical contact.</p></div>
+  </div>
+
+  <p style="color:var(--ink-3); font-size:0.9rem; margin-bottom:1.5rem;">Think of it exactly like antibiotic stewardship — but for anticoagulants. Prevent both under-treatment and over-treatment, reduce avoidable harm, and build a system around the prescription rather than stopping at the drug chart.</p>
+
+  <div class="cg">
+    <div class="card red"><div class="card-icon">🎯</div><h3>Why It Matters</h3><p>Anticoagulants are consistently in the top five drug classes causing preventable hospital harm. Getting it wrong causes thrombosis or bleeding — both can be fatal.</p></div>
+    <div class="card amber"><div class="card-icon">📊</div><h3>The Scale</h3><p>Over 1 million UK patients are on anticoagulation at any time. DOACs have overtaken warfarin but introduce new risks — fixed dosing, less monitoring, more room for clinical error.</p></div>
+    <div class="card teal"><div class="card-icon">🔄</div><h3>Stewardship vs. Prescribing</h3><p>Prescribing is starting a drug. Stewardship asks: Does this patient still need it? Is the dose right for today's renal function? Has the risk balance shifted?</p></div>
+    <div class="card blue"><div class="card-icon">🏥</div><h3>Who Drives It?</h3><p>Haematologists, anticoagulation nurses, clinical pharmacists, thrombosis leads. It needs team governance, not individual heroics.</p></div>
+  </div>
+
+  <hr class="div">
+  <div class="st" style="font-size:1.3rem; margin-bottom:0.5rem;">Getting It Wrong in Both Directions</div>
+
+  <div class="co danger"><div class="co-icon">⬆️</div><div><div class="co-lbl">Overcoagulation</div><p><strong>Too much:</strong> Major bleeding, intracranial haemorrhage, GI bleed, haematoma. Especially dangerous in the elderly, renally impaired, post-surgical, and patients on interacting medications.</p></div></div>
+  <div class="co warn"><div class="co-icon">⬇️</div><div><div class="co-lbl">Undercoagulation</div><p><strong>Too little:</strong> Recurrent VTE, stroke in AF, valve thrombosis, cancer clotting events. Subtherapeutic anticoagulation in AF carries stroke rates approaching no treatment at all.</p></div></div>
+  <div class="co safe"><div class="co-icon">✅</div><div><div class="co-lbl">The Stewardship Goal</div><p>Keep every patient within the therapeutic window. For warfarin: TTR &gt;65%. For DOACs: correct dose for renal function and indication — reviewed regularly, not set and forgotten.</p></div></div>
+
+  <hr class="div">
+  <div class="st" style="font-size:1.3rem; margin-bottom:0.8rem;">Common Real-World Stewardship Failures</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Clinical Scenario</th><th>The Failure</th><th>Consequence</th><th>Risk</th></tr></thead>
+      <tbody>
+        <tr class="row-red"><td>AF patient on apixaban 5mg BD — creatinine now 180</td><td>Dose not adjusted despite worsening renal function</td><td>Drug accumulation → major bleeding</td><td><span class="pill pr">High</span></td></tr>
+        <tr class="row-amber"><td>DVT treated 3 months — no review scheduled</td><td>Anticoagulant continued indefinitely by default</td><td>Unnecessary bleeding risk</td><td><span class="pill pa">Medium</span></td></tr>
+        <tr class="row-red"><td>Elderly patient, warfarin, INR 4.8 — no action taken</td><td>No sick-day rule. No dose reduction protocol.</td><td>Intracranial haemorrhage</td><td><span class="pill pr">High</span></td></tr>
+        <tr class="row-amber"><td>Post-op — LMWH omitted beyond recommended window</td><td>VTE prophylaxis withheld for perceived safety</td><td>DVT / PE</td><td><span class="pill pa">Medium</span></td></tr>
+        <tr><td>DOAC started for AF — no CHA₂DS₂-VASc calculated</td><td>Indication not formally assessed before prescribing</td><td>Over- or under-prescribing</td><td><span class="pill pb">Variable</span></td></tr>
+        <tr class="row-red"><td>Cancer VTE on LMWH — switched to DOAC without review</td><td>Indication-specific evidence not considered</td><td>Recurrent VTE or bleeding</td><td><span class="pill pr">High</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══ SECTION 2: PILLARS ═══ -->
+<div id="sec-pillars" class="section">
+  <div class="st">The 5 Pillars of Anticoagulation Stewardship</div>
+  <div class="sl">Framework · Structural Approach</div>
+  <div class="pillars">
+    <div class="pillar"><div class="pn">1</div><div class="pillar-icon">🎯</div><h4>Right Indication</h4><p>Validated, documented reason to anticoagulate?</p></div>
+    <div class="pillar"><div class="pn">2</div><div class="pillar-icon">💊</div><h4>Right Drug</h4><p>Cancer-VTE → LMWH/DOAC. AF → DOAC. Valve → Warfarin.</p></div>
+    <div class="pillar"><div class="pn">3</div><div class="pillar-icon">⚖️</div><h4>Right Dose</h4><p>Renal function, weight, age, drug interactions. Not one size fits all.</p></div>
+    <div class="pillar"><div class="pn">4</div><div class="pillar-icon">📅</div><h4>Right Duration</h4><p>3 months for provoked VTE. Lifelong for AF. Set a review date.</p></div>
+    <div class="pillar"><div class="pn">5</div><div class="pillar-icon">📋</div><h4>Right Monitoring</h4><p>INR for warfarin. eGFR for DOACs. Bleeding scores. Education.</p></div>
+  </div>
+  <div class="co danger"><div class="co-icon">🧠</div><div><div class="co-lbl">Memory Hook — The 5R Rule</div><p><strong>Right Indication · Right Drug · Right Dose · Right Duration · Right Monitoring.</strong> If any one of the five is absent, you do not have safe anticoagulation — you have a risk waiting to manifest.</p></div></div>
+
+  <div class="st" style="font-size:1.2rem; margin:1.5rem 0 0.8rem;">Indication-Specific Duration Guide</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Indication</th><th>Minimum Duration</th><th>Extended?</th><th>Review Point</th></tr></thead>
+      <tbody>
+        <tr><td>Provoked DVT/PE (transient risk)</td><td>3 months</td><td><span class="pill pr">Stop and review</span></td><td>3-month clinic</td></tr>
+        <tr><td>Unprovoked DVT/PE</td><td>3–6 months</td><td><span class="pill pg">Consider indefinite</span></td><td>6-month HERDOO2 / HAS-BLED</td></tr>
+        <tr><td>AF (CHA₂DS₂-VASc ≥2M / ≥3F)</td><td>Indefinite</td><td><span class="pill pg">Usually lifelong</span></td><td>Annual renal + bleeding review</td></tr>
+        <tr><td>Cancer-associated VTE</td><td>Min 6 months</td><td><span class="pill pa">While cancer active</span></td><td>Oncology review each cycle</td></tr>
+        <tr><td>Mechanical heart valve</td><td>Lifelong</td><td><span class="pill pg">Warfarin — no DOAC switch</span></td><td>Monthly INR</td></tr>
+        <tr><td>Post-surgical VTE prophylaxis</td><td>7–35 days</td><td><span class="pill pr">No (standard ortho)</span></td><td>Discharge planning</td></tr>
+        <tr><td>APS (triple positive)</td><td>Lifelong</td><td><span class="pill pg">Warfarin — avoid DOACs</span></td><td>Annual thrombophilia review</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══ SECTION 3: DOACs ═══ -->
+<div id="sec-doacs" class="section">
+  <div class="st">DOACs & Warfarin</div>
+  <div class="sl">Drug Comparison · Practical Reference</div>
+  <div class="dg">
+    <div class="dc"><div class="dc-h"><div class="dc-hn">Apixaban</div><div class="dc-hs">Factor Xa Inhibitor</div></div><div class="dc-b">
+      <div class="dc-r"><span class="dc-k">VTE Dose</span><span class="dc-v">10mg BD ×7d → 5mg BD</span></div>
+      <div class="dc-r"><span class="dc-k">AF Dose</span><span class="dc-v">5mg BD (2.5mg BD if ≥2 criteria)</span></div>
+      <div class="dc-r"><span class="dc-k">Reduce criteria</span><span class="dc-v">Age ≥80, wt ≤60kg, Cr ≥133</span></div>
+      <div class="dc-r"><span class="dc-k">Reversal</span><span class="dc-v">Andexanet alfa</span></div>
+      <div class="dc-r"><span class="dc-k">GI bleed</span><span class="dc-v"><span class="pill pg">Lowest of DOACs</span></span></div>
+      <div class="dc-r"><span class="dc-k">Food</span><span class="dc-v">Not food-dependent</span></div>
+    </div></div>
+    <div class="dc"><div class="dc-h"><div class="dc-hn">Rivaroxaban</div><div class="dc-hs">Factor Xa Inhibitor</div></div><div class="dc-b">
+      <div class="dc-r"><span class="dc-k">VTE Dose</span><span class="dc-v">15mg BD ×21d → 20mg OD</span></div>
+      <div class="dc-r"><span class="dc-k">AF Dose</span><span class="dc-v">20mg OD with evening meal</span></div>
+      <div class="dc-r"><span class="dc-k">Renal (CrCl 15–49)</span><span class="dc-v">15mg OD (AF)</span></div>
+      <div class="dc-r"><span class="dc-k">Avoid if</span><span class="dc-v">CrCl &lt;15</span></div>
+      <div class="dc-r"><span class="dc-k">Reversal</span><span class="dc-v">Andexanet alfa</span></div>
+      <div class="dc-r"><span class="dc-k">GI bleed</span><span class="dc-v"><span class="pill pa">Moderate–High</span></span></div>
+    </div></div>
+    <div class="dc"><div class="dc-h"><div class="dc-hn">Dabigatran</div><div class="dc-hs">Direct Thrombin Inhibitor</div></div><div class="dc-b">
+      <div class="dc-r"><span class="dc-k">VTE Dose</span><span class="dc-v">150mg BD (after 5d LMWH)</span></div>
+      <div class="dc-r"><span class="dc-k">AF Dose</span><span class="dc-v">150mg BD; 110mg BD if ≥80yrs</span></div>
+      <div class="dc-r"><span class="dc-k">Avoid if</span><span class="dc-v">CrCl &lt;30</span></div>
+      <div class="dc-r"><span class="dc-k">Reversal</span><span class="dc-v">Idarucizumab (Praxbind)</span></div>
+      <div class="dc-r"><span class="dc-k">GI bleed</span><span class="dc-v"><span class="pill pa">Moderate–High</span></span></div>
+      <div class="dc-r"><span class="dc-k">Key risk</span><span class="dc-v">P-gp substrate — many interactions</span></div>
+    </div></div>
+    <div class="dc"><div class="dc-h"><div class="dc-hn">Warfarin</div><div class="dc-hs">Vitamin K Antagonist</div></div><div class="dc-b">
+      <div class="dc-r"><span class="dc-k">AF/VTE INR target</span><span class="dc-v">2.0–3.0</span></div>
+      <div class="dc-r"><span class="dc-k">Mitral valve</span><span class="dc-v">INR 2.5–3.5</span></div>
+      <div class="dc-r"><span class="dc-k">Aortic valve</span><span class="dc-v">INR 2.0–3.0</span></div>
+      <div class="dc-r"><span class="dc-k">Renal</span><span class="dc-v">Safe in CKD (not renally cleared)</span></div>
+      <div class="dc-r"><span class="dc-k">Reversal</span><span class="dc-v">Vit K, PCC, FFP</span></div>
+      <div class="dc-r"><span class="dc-k">Interactions</span><span class="dc-v"><span class="pill pr">Extensive — diet + drugs</span></span></div>
+    </div></div>
+  </div>
+
+  <div class="co danger"><div class="co-icon">🚫</div><div><div class="co-lbl">Three Situations Where DOACs Are Inferior</div><p><strong>1. Mechanical heart valves</strong> — warfarin only (RE-ALIGN trial: dabigatran caused more events). <strong>2. APS with triple positivity</strong> — warfarin preferred (TRAPS trial: higher event rate with rivaroxaban). <strong>3. Severe renal failure (CrCl &lt;15–30)</strong> — all DOACs accumulate; warfarin or LMWH required.</p></div></div>
+
+  <div class="st" style="font-size:1.1rem; margin:1.5rem 0 0.8rem;">DOAC Renal Dosing — Quick Reference</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Agent</th><th>CrCl &gt;50</th><th>CrCl 30–50</th><th>CrCl 15–29</th><th>CrCl &lt;15</th></tr></thead>
+      <tbody>
+        <tr><td>Apixaban (AF)</td><td>5mg BD</td><td>5mg BD (reduce if criteria)</td><td>2.5mg BD</td><td>Not recommended</td></tr>
+        <tr><td>Rivaroxaban (AF)</td><td>20mg OD</td><td>15mg OD</td><td>15mg OD (caution)</td><td>Avoid</td></tr>
+        <tr><td>Dabigatran (AF)</td><td>150mg BD</td><td>150mg BD (110mg if ≥80)</td><td>Avoid</td><td>Avoid</td></tr>
+        <tr><td>Edoxaban (VTE)</td><td>60mg OD (reduce if &gt;100)</td><td>30mg OD</td><td>30mg OD (caution)</td><td>Avoid</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="co safe"><div class="co-icon">🧮</div><div><div class="co-lbl">Stewardship Tip — Renal Monitoring</div><p>Check eGFR at least annually for all DOAC patients. Elderly, frail, or acutely unwell — every 3–6 months. Use CKD-EPI, not MDRD. Dabigatran is 80% renally excreted — most sensitive to renal decline.</p></div></div>
+</div>
+
+<!-- ═══ SECTION 4: RISK ═══ -->
+<div id="sec-risk" class="section">
+  <div class="st">Risk Assessment Frameworks</div>
+  <div class="sl">Bleeding vs. Thrombosis · Scoring Tools</div>
+  <div class="co blue"><div class="co-icon">⚖️</div><div><div class="co-lbl">The Core Balance</div><p>Every anticoagulation decision weighs thrombotic against haemorrhagic risk. Neither score alone drives the decision — clinical judgement integrates both. But you need the numbers to anchor your reasoning.</p></div></div>
+
+  <div class="two">
+    <div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:700;color:var(--ink);margin-bottom:0.7rem;">CHA₂DS₂-VASc Score (AF)</div>
+      <div class="tw" style="margin-top:0;">
+        <table><thead><tr><th>Risk Factor</th><th>Score</th></tr></thead><tbody>
+          <tr><td>Cardiac failure / LVEF &lt;40%</td><td>1</td></tr>
+          <tr><td>Hypertension</td><td>1</td></tr>
+          <tr><td>Age ≥75 years</td><td>2</td></tr>
+          <tr><td>Diabetes mellitus</td><td>1</td></tr>
+          <tr><td>Stroke / TIA / thromboembolism</td><td>2</td></tr>
+          <tr><td>Vascular disease (MI, PAD)</td><td>1</td></tr>
+          <tr><td>Age 65–74 years</td><td>1</td></tr>
+          <tr><td>Female sex</td><td>1</td></tr>
+        </tbody></table>
+      </div>
+      <p class="ss">Score ≥2 (men) / ≥3 (women) → anticoagulate.<br>Score 1 (men) / 2 (women) → consider anticoagulation.</p>
+    </div>
+    <div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:700;color:var(--ink);margin-bottom:0.7rem;">HAS-BLED Score (Bleeding)</div>
+      <div class="tw" style="margin-top:0;">
+        <table><thead><tr><th>Risk Factor</th><th>Score</th></tr></thead><tbody>
+          <tr><td>Hypertension (SBP &gt;160)</td><td>1</td></tr>
+          <tr><td>Renal dysfunction (dialysis / Cr &gt;200)</td><td>1</td></tr>
+          <tr><td>Liver dysfunction (cirrhosis / bilirubin &gt;2×)</td><td>1</td></tr>
+          <tr><td>Stroke history</td><td>1</td></tr>
+          <tr><td>Bleeding history or predisposition</td><td>1</td></tr>
+          <tr><td>Labile INR (TTR &lt;60%)</td><td>1</td></tr>
+          <tr><td>Elderly (&gt;65 years)</td><td>1</td></tr>
+          <tr><td>Drugs (antiplatelets / NSAIDs)</td><td>1</td></tr>
+          <tr><td>Alcohol (≥8 drinks/week)</td><td>1</td></tr>
+        </tbody></table>
+      </div>
+      <p class="ss">Score ≥3 → high bleeding risk. <strong>Not a reason to withhold</strong> — it flags modifiable factors to address.</p>
+    </div>
+  </div>
+
+  <div class="co danger"><div class="co-icon">❗</div><div><div class="co-lbl">The Single Most Important Teaching Point on HAS-BLED</div><p>A high HAS-BLED score is <strong>not a reason to stop anticoagulation in AF</strong> — it is a reason to <strong>modify reversible bleeding risk factors</strong>. Uncontrolled BP? Treat it. NSAIDs? Stop them. Labile INR? Switch to a DOAC. In AF with CHA₂DS₂-VASc ≥2, the stroke risk almost always outweighs bleeding risk.</p></div></div>
+
+  <div style="font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:700;color:var(--ink);margin:1.5rem 0 0.8rem;">Khorana Score — Cancer-Associated VTE</div>
+  <div class="tw">
+    <table><thead><tr><th>Risk Factor</th><th>Score</th></tr></thead><tbody>
+      <tr><td>High-risk cancer site (gastric, pancreatic)</td><td>2</td></tr>
+      <tr><td>Lung, lymphoma, gynaecological, bladder, testicular</td><td>1</td></tr>
+      <tr><td>Pre-chemo platelet count ≥350 × 10⁹/L</td><td>1</td></tr>
+      <tr><td>Haemoglobin &lt;100 g/L or ESA use</td><td>1</td></tr>
+      <tr><td>Pre-chemo WBC &gt;11 × 10⁹/L</td><td>1</td></tr>
+      <tr><td>BMI ≥35</td><td>1</td></tr>
+    </tbody></table>
+  </div>
+  <p class="ss" style="margin-bottom:1.5rem;">Score ≥2 = high VTE risk during chemotherapy. Consider primary thromboprophylaxis with apixaban or rivaroxaban (AVERT/CASSINI trial evidence) or LMWH.</p>
+
+  <div class="rm">
+    <div class="rmc rmh"></div>
+    <div class="rmc rmh">Low Thrombotic Risk</div>
+    <div class="rmc rmh">High Thrombotic Risk</div>
+    <div class="rml">High Bleeding Risk</div>
+    <div class="rmc rmhl"><div class="rmt">⚠️ No anticoagulation</div><div style="font-size:0.76rem;color:var(--ink-3);">Mechanical prophylaxis. Address bleeding cause. Frequent review.</div></div>
+    <div class="rmc rmhh"><div class="rmt">🔴 Hardest decision</div><div style="font-size:0.76rem;color:var(--blood);">MDT discussion. Temporary IVC filter? Reduced dose? Haematology input essential.</div></div>
+    <div class="rml">Low Bleeding Risk</div>
+    <div class="rmc rmll"><div class="rmt">🟢 Prophylactic dose</div><div style="font-size:0.76rem;color:var(--teal);">Standard VTE prophylaxis. Review at 30 days.</div></div>
+    <div class="rmc rmlh"><div class="rmt">✅ Full anticoagulation</div><div style="font-size:0.76rem;color:var(--blue);">Therapeutic DOAC or LMWH. Indication and duration clearly documented.</div></div>
+  </div>
+</div>
+
+<!-- ═══ SECTION 5: FLOWCHART ═══ -->
+<div id="sec-flowchart" class="section">
+  <div class="st">Anticoagulation Decision Flow</div>
+  <div class="sl">Clinical Algorithm · Step-by-Step</div>
+  <div class="fw">
+    <div class="fh">🩸 Anticoagulation Stewardship Decision Algorithm</div>
+    <div class="flow">
+      <div class="fn start">Patient identified — on or being considered for anticoagulation</div>
+      <div class="arr"></div>
+      <div class="fn action">STEP 1 — Confirm the Indication<small>Validated, documented reason? (AF, VTE, valve, cancer-VTE, APS)</small></div>
+      <div class="arr"></div>
+      <div class="fq">Is indication confirmed and documented in notes?</div>
+      <div class="br">
+        <div class="bc"><div class="bl bln">NO</div><div class="fn stop" style="max-width:200px;">STOP — Review Indication<small>Document or discontinue. Do not continue by default.</small></div></div>
+        <div class="bc"><div class="bl bly">YES</div><div class="fn ok" style="max-width:200px;">Continue to Step 2 ↓</div></div>
+      </div>
+      <div class="arr"></div>
+      <div class="fn action">STEP 2 — Choose the Right Drug<small>DOAC vs. LMWH vs. Warfarin — indication, renal function, interactions, patient preference</small></div>
+      <div class="arr"></div>
+      <div class="fn action">STEP 3 — Calculate the Right Dose<small>Check eGFR/CrCl. Check weight. Apply dose-reduction criteria. Pharmacist review.</small></div>
+      <div class="arr"></div>
+      <div class="fn action">STEP 4 — Assess Bleeding Risk<small>HAS-BLED / IMPROVE. Identify and address modifiable factors. Do not withhold if stroke risk dominates.</small></div>
+      <div class="arr"></div>
+      <div class="fn action">STEP 5 — Define the Duration<small>Document planned duration. Book review clinic. Set reminder at 3 or 6 months.</small></div>
+      <div class="arr"></div>
+      <div class="fn ok">STEP 6 — Patient Education<small>What it does. When to take it. Missed dose plan. Bleeding warning signs. No abrupt stops.</small></div>
+      <div class="arr"></div>
+      <div class="fn action">STEP 7 — Monitoring Plan<small>INR monthly (warfarin). eGFR 3–6 monthly (DOACs). Annual review of indication + drug choice.</small></div>
+      <div class="arr"></div>
+      <div class="fn end">🔁 ONGOING — Review at every hospital contact: inpatient, outpatient, community</div>
+    </div>
+  </div>
+
+  <hr class="div">
+  <div class="st" style="font-size:1.2rem; margin-bottom:0.8rem;">Bridging Anticoagulation — When Is It Needed?</div>
+  <div class="co warn"><div class="co-icon">🌉</div><div><div class="co-lbl">Key Evidence</div><p>Bridging is <strong>NOT needed</strong> for most AF patients on warfarin having elective procedures (BRIDGE trial 2015: no reduction in thrombosis, significant increase in bleeding). Bridging <strong>IS considered</strong> for: mechanical mitral valve, VTE within 3 months, very high stroke risk AF. DOACs require no bridging — stop based on procedural bleeding risk, then restart.</p></div></div>
+
+  <div class="tl">
+    <div class="ti"><div class="td"></div><div class="tt">5–7 Days Before</div><h4>Stop Warfarin</h4><p>Check INR 2–3 days pre-op. Target INR &lt;1.5 for most; &lt;1.2 for neurosurgery/ophthalmology.</p></div>
+    <div class="ti"><div class="td"></div><div class="tt">2–3 Days Before (if bridging)</div><h4>Start Therapeutic LMWH</h4><p>Once INR &lt;2.0. Last dose 24 hours before procedure.</p></div>
+    <div class="ti"><div class="td"></div><div class="tt">Day of Procedure</div><h4>Confirm INR &lt;1.5</h4><p>Hold LMWH. Restart warfarin same evening if haemostasis achieved.</p></div>
+    <div class="ti"><div class="td"></div><div class="tt">24–48 Hours Post-Op</div><h4>Resume LMWH (if bridging)</h4><p>Continue until INR 2.0–3.0 on two consecutive readings, then stop LMWH.</p></div>
+  </div>
+
+  <div class="co info"><div class="co-icon">⏱</div><div><div class="co-lbl">DOAC Peri-Procedural Timing — No Bridging Required</div>
+    <div class="tw" style="margin:0.7rem 0 0;">
+      <table><thead><tr><th>Agent</th><th>Low Bleed Risk — Stop</th><th>High Bleed Risk — Stop</th><th>Restart Post-Op</th></tr></thead><tbody>
+        <tr><td>Apixaban / Rivaroxaban</td><td>24h before</td><td>48h before</td><td>24–48h after</td></tr>
+        <tr><td>Dabigatran (CrCl &gt;50)</td><td>24h before</td><td>48h before</td><td>24–48h after</td></tr>
+        <tr><td>Dabigatran (CrCl 30–50)</td><td>36h before</td><td>72–96h before</td><td>48–72h after</td></tr>
+      </tbody></table>
+    </div>
+  </div></div>
+</div>
+
+<!-- ═══ SECTION 6: REVERSAL ═══ -->
+<div id="sec-reversal" class="section">
+  <div class="st">Reversal Agents</div>
+  <div class="sl">Emergency Anticoagulation Reversal · Dosing Reference</div>
+  <div class="co danger"><div class="co-icon">🚨</div><div><div class="co-lbl">When to Reverse</div><p>Major or life-threatening bleeding (intracranial, haemodynamic compromise, organ-threatening), or urgent surgery that cannot be delayed. For non-major bleeding or elective procedures — hold the drug and wait. Specific reversal is not always required or available.</p></div></div>
+  <div class="rg">
+    <div class="rc"><div class="rt" style="background:var(--blood);"><span class="rd">Idarucizumab (Praxbind)</span><span class="pill" style="background:rgba(255,255,255,0.2);color:white;border:1px solid rgba(255,255,255,0.3);">Dabigatran</span></div><div class="rb">
+      <div class="ri"><strong>Dose:</strong> 5g IV (2 × 2.5g vials, consecutively)</div>
+      <div class="ri"><strong>Onset:</strong> Minutes</div>
+      <div class="ri"><strong>Duration:</strong> 24 hours</div>
+      <div class="ri"><strong>Mechanism:</strong> Monoclonal antibody fragment — binds dabigatran with 350× higher affinity than thrombin</div>
+      <div class="ri"><strong>Monitor post-dose:</strong> dTT or ECT (not APTT alone)</div>
+      <div class="ri"><strong>Evidence:</strong> RE-VERSE AD trial (2017)</div>
+    </div></div>
+    <div class="rc"><div class="rt" style="background:#7b3800;"><span class="rd">Andexanet Alfa (Ondexxya)</span><span class="pill" style="background:rgba(255,255,255,0.2);color:white;border:1px solid rgba(255,255,255,0.3);">Xa Inhibitors</span></div><div class="rb">
+      <div class="ri"><strong>Low regimen:</strong> 400mg IV bolus + 480mg infusion (apixaban ≤5mg / rivaroxaban ≤10mg, dose ≥8h ago)</div>
+      <div class="ri"><strong>High regimen:</strong> 800mg bolus + 960mg infusion — all other situations</div>
+      <div class="ri"><strong>Onset:</strong> 2–5 minutes during bolus</div>
+      <div class="ri"><strong>Duration:</strong> ~2 hours — coagulation recovers after infusion ends</div>
+      <div class="ri"><strong>Evidence:</strong> ANNEXA-4 trial</div>
+      <div class="ri"><strong>Note:</strong> Very expensive — restricted use in most UK trusts</div>
+    </div></div>
+    <div class="rc"><div class="rt" style="background:var(--blue);"><span class="rd">PCC (Beriplex / Octaplex)</span><span class="pill" style="background:rgba(255,255,255,0.2);color:white;border:1px solid rgba(255,255,255,0.3);">Warfarin / Xa off-label</span></div><div class="rb">
+      <div class="ri"><strong>Warfarin major bleed + Vit K 5–10mg IV:</strong></div>
+      <div class="ri"><strong>INR 2.0–3.9:</strong> 25 IU/kg (max 2500 IU)</div>
+      <div class="ri"><strong>INR 4.0–6.0:</strong> 35 IU/kg (max 3500 IU)</div>
+      <div class="ri"><strong>INR &gt;6.0:</strong> 50 IU/kg (max 5000 IU)</div>
+      <div class="ri"><strong>DOAC (if andexanet unavailable):</strong> 50 IU/kg off-label</div>
+      <div class="ri"><strong>Check INR:</strong> 15–30 min post-infusion</div>
+    </div></div>
+    <div class="rc"><div class="rt" style="background:var(--teal);"><span class="rd">Protamine Sulphate</span><span class="pill" style="background:rgba(255,255,255,0.2);color:white;border:1px solid rgba(255,255,255,0.3);">UFH / LMWH</span></div><div class="rb">
+      <div class="ri"><strong>UFH:</strong> 1mg per 100 units UFH in last 2–3h</div>
+      <div class="ri"><strong>Max dose:</strong> 50mg IV over 10 min</div>
+      <div class="ri"><strong>LMWH within 8h:</strong> 1mg per 1mg enoxaparin (~60% neutralisation)</div>
+      <div class="ri"><strong>LMWH &gt;8h:</strong> 0.5mg per 1mg enoxaparin</div>
+      <div class="ri"><strong>Caution:</strong> Anaphylaxis risk — fish allergy or prior protamine exposure</div>
+    </div></div>
+  </div>
+  <div class="co safe"><div class="co-icon">🩸</div><div><div class="co-lbl">When Specific Reversal Is Not Available</div><p>Stop anticoagulant. Direct pressure. Transfuse if haemodynamically compromised. Tranexamic acid 1g IV for mucosal / wound bleeding. PCC as a holding measure for Xa inhibitors. Activated charcoal within 2–4h of DOAC ingestion if no contraindication. Haemodialysis removes dabigatran — not Xa inhibitors.</p></div></div>
+</div>
+
+<!-- ═══ SECTION 7: MONITORING ═══ -->
+<div id="sec-monitoring" class="section">
+  <div class="st">Monitoring Framework</div>
+  <div class="sl">Ongoing Stewardship · Review Triggers</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Agent</th><th>What to Monitor</th><th>Frequency</th><th>Action Trigger</th><th>Lab Test</th></tr></thead>
+      <tbody>
+        <tr class="row-red"><td>Warfarin</td><td>INR — target 2.0–3.0 (valve: 2.5–3.5)</td><td>Weekly until stable → monthly</td><td>INR &lt;1.5 or &gt;5.0 → urgent review. TTR &lt;65% → optimise or switch</td><td>INR (PT ratio)</td></tr>
+        <tr class="row-amber"><td>Apixaban</td><td>eGFR, weight, dose criteria</td><td>Annually; 3–6 monthly if CrCl &lt;60 / frail</td><td>CrCl &lt;25–30 → review dose; &lt;15 → haematology advice</td><td>Anti-Xa (drug-specific)</td></tr>
+        <tr class="row-amber"><td>Rivaroxaban</td><td>eGFR, dose appropriateness</td><td>Annually; more if declining renal function</td><td>CrCl &lt;30 (AF) → reduce; &lt;15 → avoid</td><td>Anti-Xa (drug-specific)</td></tr>
+        <tr><td>Dabigatran</td><td>eGFR — CrCl ÷ 10 = months between checks</td><td>Calculated from renal function</td><td>CrCl &lt;30 → avoid; consider switch to warfarin or apixaban</td><td>dTT or ECT if needed</td></tr>
+        <tr class="row-green"><td>LMWH (cancer-VTE)</td><td>Platelets (HIT surveillance), renal function</td><td>Weekly ×4 weeks → monthly</td><td>Platelet drop &gt;50% → suspect HIT → anti-PF4, stop LMWH</td><td>Anti-Xa (4h post dose)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="co info"><div class="co-icon">📐</div><div><div class="co-lbl">The Dabigatran Renal Monitoring Rule</div><p>CrCl (mL/min) ÷ 10 = monitoring interval in months. CrCl 60 → every 6 months. CrCl 30 → every 3 months. This prevents drug accumulation and harm before it occurs.</p></div></div>
+
+  <div class="st" style="font-size:1.1rem; margin:1.5rem 0 0.8rem;">What Lab Tests Actually Tell You</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Test</th><th>Measures</th><th>Useful For</th><th>Key Limitation</th></tr></thead>
+      <tbody>
+        <tr><td>INR / PT</td><td>Extrinsic + common pathway</td><td>Warfarin monitoring</td><td>Unreliable for DOACs — can be misleading</td></tr>
+        <tr><td>APTT</td><td>Intrinsic + common pathway</td><td>UFH, dabigatran (rough guide)</td><td>Not linear with dabigatran at therapeutic doses</td></tr>
+        <tr><td>Anti-Xa (drug-specific)</td><td>Plasma DOAC level (Xa inhibitors)</td><td>Overdose, surgery timing, renal failure</td><td>Must specify which drug — not all labs calibrated for all agents</td></tr>
+        <tr><td>dTT (dilute thrombin time)</td><td>Dabigatran concentration</td><td>Dabigatran monitoring / reversal decision</td><td>Not widely available; ECT is an alternative</td></tr>
+        <tr><td>TEG / ROTEM</td><td>Global clot formation dynamics</td><td>Perioperative / massive haemorrhage</td><td>Not specific for individual DOAC levels</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="co danger"><div class="co-icon">⚠️</div><div><div class="co-lbl">Normal INR Does NOT Mean No DOAC Effect</div><p>A patient on apixaban can have a completely normal INR and APTT yet have full anticoagulant effect. Only a calibrated anti-Xa assay detects apixaban or rivaroxaban. Always ask about DOAC use in emergency surgery even when standard coagulation tests are normal.</p></div></div>
+</div>
+
+<!-- ═══ SECTION 8: CHECKLIST ═══ -->
+<div id="sec-checklist" class="section">
+  <div class="st">Anticoagulation Stewardship Checklist</div>
+  <div class="sl">Clinical Audit Tool · Patient Safety</div>
+  <div class="two">
+    <div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:0.63rem;color:var(--blood);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.8rem;padding-bottom:0.5rem;border-bottom:2px solid var(--blood);">At Initiation</div>
+      <ul class="chk">
+        <li><span>Indication documented in notes</span></li>
+        <li><span>CHA₂DS₂-VASc / Khorana score recorded</span></li>
+        <li><span>HAS-BLED / bleeding risk assessed</span></li>
+        <li><span>Renal function (eGFR / CrCl) checked</span></li>
+        <li><span>Drug chosen appropriate for indication</span></li>
+        <li><span>Dose correct for renal function and weight</span></li>
+        <li><span>Planned duration documented</span></li>
+        <li><span>Review date set (clinic or GP)</span></li>
+        <li><span>Patient anticoagulation alert card given</span></li>
+        <li><span>Patient counselled — bleeding signs, missed doses, sick day rules</span></li>
+        <li><span>Drug interactions checked (pharmacist review)</span></li>
+        <li><span>Antiplatelet co-therapy assessed</span></li>
+      </ul>
+    </div>
+    <div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:0.63rem;color:var(--teal);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.8rem;padding-bottom:0.5rem;border-bottom:2px solid var(--teal);">At Each Review</div>
+      <ul class="chk">
+        <li><span>Is the indication still present?</span></li>
+        <li><span>Has the bleeding vs. thrombosis balance changed?</span></li>
+        <li><span>Renal function checked — eGFR trend documented</span></li>
+        <li><span>Weight checked (LMWH / dose criteria)</span></li>
+        <li><span>INR in target range? TTR &gt;65% for warfarin?</span></li>
+        <li><span>Any new interacting medications started?</span></li>
+        <li><span>Patient adherent? Taking drug correctly?</span></li>
+        <li><span>Any bleeding episodes since last review?</span></li>
+        <li><span>Any falls, head injury, or trauma?</span></li>
+        <li><span>Is duration target met? Should drug stop now?</span></li>
+        <li><span>Patient still carries anticoagulation alert card</span></li>
+        <li><span>Is the current drug still the best choice?</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <hr class="div">
+  <div class="co danger"><div class="co-icon">🔴</div><div><div class="co-lbl">High-Yield Viva & Exam Point</div><p>If asked "What does anticoagulation stewardship mean in your practice?" — the answer goes beyond the drug chart. It includes: structured indication review at every contact, renal function monitoring at fixed intervals, patient education on sick day rules, systematic deprescribing when duration is met, and pharmacist-led anticoagulation clinics with clear governance.</p></div></div>
+  <div class="co safe"><div class="co-icon">📚</div><div><div class="co-lbl">Key Guidelines to Know</div><p><strong>AF:</strong> ESC 2023, NICE NG196. <strong>VTE:</strong> BSH 2023, NICE NG158. <strong>Cancer-VTE:</strong> ISTH 2019, BSH 2022. <strong>Reversal:</strong> BSH 2022. <strong>Peri-procedural:</strong> ACC/AHA 2022. <strong>APS:</strong> EULAR 2019.</p></div></div>
+
+  <div class="qb">
+    <div class="qb-t">10 Questions Every Clinician Should Ask Before Anticoagulating</div>
+    <ol class="ql">
+      <li>What is the exact indication, and is it evidence-based and documented?</li>
+      <li>Which drug is most appropriate for this specific indication?</li>
+      <li>What is the current eGFR / CrCl, and does it require dose adjustment?</li>
+      <li>What is the thrombotic risk score (CHA₂DS₂-VASc / Khorana)?</li>
+      <li>What is the bleeding risk (HAS-BLED / IMPROVE), and are there modifiable factors?</li>
+      <li>How long should this treatment last, and when will I formally review it?</li>
+      <li>Are there drug–drug interactions affecting the DOAC (P-gp, CYP3A4)?</li>
+      <li>Does the patient understand their treatment and what to do if they bleed?</li>
+      <li>Do they need reversal agent planning for an elective procedure?</li>
+      <li>Who is responsible for ongoing monitoring — haematology, GP, or anticoagulation clinic?</li>
+    </ol>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft">
+    <div class="fl">
+      <div class="flc">🩸</div>
+      <div>
+        <div class="fbn">Blood 🩸 Doctor</div>
+        <div class="fbs">Haematology Education · Clinical Excellence</div>
+      </div>
+    </div>
+    <p class="ftag">"Making complex haematology simple — for clinicians, trainees, and patients."</p>
+  </div>
+  <div class="fb">
+    <div class="fc">
+      <div class="fc-t">Author</div>
+      <p><strong>Dr Abdul Mannan</strong></p>
+      <p>FRCPath · FCPS</p>
+      <p>Consultant Haematologist</p>
+      <p>Director, Bangor Haemophilia Centre</p>
+      <p>Thrombosis Lead · Haematology Laboratory Lead</p>
+      <p>Betsi Cadwaladr University Health Board</p>
+      <p>North Wales, UK</p>
+    </div>
+    <div class="fc">
+      <div class="fc-t">Clinical Expertise</div>
+      <p>Bleeding Disorders & Haemophilia</p>
+      <p>Thrombosis & Anticoagulation</p>
+      <p>Malignant Haematology</p>
+      <p>Bone Marrow Transplant</p>
+      <p>CAR-T Cell Therapy</p>
+      <p>Bispecific Antibodies</p>
+      <p>Medical Education & Mentoring</p>
+    </div>
+    <div class="fc">
+      <div class="fc-t">Connect</div>
+      <a href="mailto:blooddoctor.co@gmail.com">📧 blooddoctor.co@gmail.com</a>
+      <a href="#">🔗 LinkedIn — Blood 🩸 Doctor</a>
+      <a href="#">🐦 Twitter — Blood 🩸 Doctor</a>
+      <p style="margin-top:0.8rem;font-size:0.74rem;line-height:1.6;color:rgba(255,255,255,0.35);">Educational reference only. Always consult current BSH, NICE, ESC, and ISTH guidelines for clinical decisions.</p>
+    </div>
+  </div>
+  <div class="fbase">© 2025 Blood 🩸 Doctor · Dr Abdul Mannan FRCPath FCPS · <a href="mailto:blooddoctor.co@gmail.com">blooddoctor.co@gmail.com</a> · All rights reserved · Educational use only</div>
+</footer>
+
+<script>
+function show(tab, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tb').forEach(b => b.classList.remove('active'));
+  document.getElementById('sec-' + tab).classList.add('active');
+  el.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function fixCols() {
+  document.querySelectorAll('.two').forEach(el => {
+    el.style.gridTemplateColumns = window.innerWidth < 660 ? '1fr' : '1fr 1fr';
+  });
+}
+window.addEventListener('resize', fixCols);
+fixCols();
+</script>
+</body>
+</html>
